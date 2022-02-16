@@ -1,8 +1,16 @@
-import {Container,Box,Heading,Image,useColorModeValue} from "@chakra-ui/react"
+import NextLink from 'next/link'
+import {Container,Box,Heading,Image,Button,useColorModeValue, AspectRatio} from 
+"@chakra-ui/react"
+import Layout from '../components/layouts/article'
 import Section from "../components/section"
+import Paragraph from '../components/paragraph'
+import { ChevronRightIcon } from "@chakra-ui/icons"
+import { BioSection,BioYear } from '../components/bio'
+
 
 const Page = () =>{
   return(
+    <Layout>
     <Container >
       <Box borderRadius='lg' bg={useColorModeValue('whiteAlpha.500',"whiteAlpha.200")} p={3} mb={6} align='center'>
         Real Dev Hours UwU
@@ -30,9 +38,36 @@ const Page = () =>{
         <Heading as='h3' variant='section-title'>
           Work 
         </Heading> 
-        <p>Paragraph</p>
+        <Paragraph>Paragraph about myself</Paragraph>
+        <Box align='center' my={4}>
+          <NextLink href='/projects'>
+            <Button rightIcon={<ChevronRightIcon/>} colorScheme='teal'>
+            My Projects
+            </Button>
+          </NextLink>
+        </Box>
       </Section>
+      <Section delay={0.2}>
+        <Heading as='h3' variant='section-title'>
+          Bio ?
+        </Heading>
+        <BioSection>
+          <BioYear>1969  </BioYear>
+          Was born
+        </BioSection>
+        <BioSection>
+          <BioYear>2022</BioYear>
+          I am here
+        </BioSection>
+      </Section>
+      <Section delay={0.3}>
+        <Heading as='h3' variant='section-title'>
+          Other things 
+        </Heading>
+        <Paragraph>That I Enjoy Doing</Paragraph>
+        </Section>
     </Container>
+    </Layout>
   )
 }
 

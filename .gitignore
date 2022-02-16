@@ -8,3 +8,5 @@ Thumbs.db
 dist/
 notes.md
 node_modules/
+.next
+

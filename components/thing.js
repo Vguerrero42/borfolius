@@ -17,13 +17,20 @@ const Thing = ()=>{
   const [renderer,setRenderer] = useState()
   const [_camera,setCamera] =useState()
   const [target] = useState(new THREE.Vector3(-0.5,1.2,0))
+  //
   const [initialCameraPosition] = useState(
     new THREE.Vector3(
-      20*Math.sin(0.2*Math.PI),
+      -20*Math.sin(0.2*Math.PI),
       10,
       20*Math.cos(0.2*Math.PI)
     )
   )
+  /**
+   * 
+   *  20*Math.sin(0.2*Math.PI),
+      10,
+      20*Math.cos(0.2*Math.PI)
+   */
   const [scene] = useState(new THREE.Scene())
   const [_controls,setControls] = useState()
   
@@ -41,10 +48,10 @@ const Thing = ()=>{
   const effectController = {
     showDots: true,
     showLines: true,
-    minDistance: 175,
-    limitConnections: true,
-    maxConnections: 20,
-    particleCount: 500
+    minDistance: 200,
+    limitConnections: false,
+    maxConnections: 5,
+    particleCount: 100
   };
 
   const handleWindowResize = useCallback(() =>{
@@ -67,7 +74,8 @@ const Thing = ()=>{
     
       const renderer = new THREE.WebGLRenderer({
         antialias:true,
-        alpha:true
+        alpha:true,
+        // preserveDrawingBuffer:true
       })
       
       renderer.setPixelRatio(window.devicePixelRatio)
@@ -76,15 +84,15 @@ const Thing = ()=>{
       container.appendChild(renderer.domElement)
       setRenderer(renderer)
 
-      const scale = scH * 0.5 + 4.8
+      const scale = scH 
       const scaleDouble = scale * 2
       
       const camera = new THREE.OrthographicCamera(
         -scale,
         scale,scale,
-        -scale,.001,10000
+        -scale,0.001,50000
       )
-    
+      // const camera = new THREE.PerspectiveCamera(45,scW/scH,1,1000)
     camera.position.copy(initialCameraPosition)
     camera.lookAt(target)
     setCamera(camera)
@@ -93,14 +101,14 @@ const Thing = ()=>{
     const group = new THREE.Group()
     // scene.add(ambientLight)
     scene.add(group)
-    const sphere = new THREE.SphereGeometry(r,r,r)
-    const object = new THREE.Mesh(sphere,new THREE.MeshBasicMaterial())
+    const sphere = new THREE.SphereGeometry(r,r/4,r/8)
+    const object = new THREE.Mesh(sphere,new THREE.MeshBasicMaterial({color:0x0ff088}))
     const helper = new THREE.BoxHelper(object)
     helper.material.color.setHex(0x101010)
     helper.material.blending = THREE.AdditiveBlending
     helper.material.transparent = false
     group.add(helper)
-    // group.add(object)
+    group.add(object)
   
     const controls = new OrbitControls(camera,renderer.domElement)
     controls.autoRotate = true
@@ -112,28 +120,28 @@ const Thing = ()=>{
  PARTICLES
  */
     
- const segments = maxParticleCount * maxParticleCount;
+      const segments = maxParticleCount * maxParticleCount;
 
 				positions = new Float32Array( segments * 3 );
 				colors = new Float32Array( segments * 3 );
 
 				const pMaterial = new THREE.PointsMaterial( {
-					color: 0xff00,
-					size: 3,
+					color: new THREE.Color(0x1f003c) ,
+					size: 10,
+          vertexColors:false,
 					blending: THREE.AdditiveBlending,
 					transparent: true,
-					sizeAttenuation: false
+					sizeAttenuation: false,
+          depthTest:false
 				} );
 
 				particles = new THREE.BufferGeometry();
 				particlePositions = new Float32Array( maxParticleCount * 3 );
 
 				for ( let i = 0; i < maxParticleCount; i ++ ) {
-          console.log('here')
-
-					const x = Math.random() * r - r / 2;
+					const x = Math.random() * r- r/ 2;
 					const y = Math.random() * r - r / 2;
-					const z = Math.random() * r - r / 2;
+					const z = Math.random() * r- r/ 2;
 
 					particlePositions[ i * 3 ] = x;
 					particlePositions[ i * 3 + 1 ] = y;
@@ -156,17 +164,17 @@ const Thing = ()=>{
 
 				const geometry = new THREE.BufferGeometry();
 
-				geometry.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ).setUsage( THREE.DynamicDrawUsage ) );
+				geometry.setAttribute( 'position', new THREE.BufferAttribute( positions, 3).setUsage( THREE.DynamicDrawUsage ) );
 				geometry.setAttribute( 'color', new THREE.BufferAttribute( colors, 3).setUsage( THREE.DynamicDrawUsage ) );
 
 				geometry.computeBoundingSphere();
 
-				geometry.setDrawRange( 0, 0 );
+				geometry.setDrawRange( 0,0 );
 
 				const material = new THREE.LineBasicMaterial( {
 					vertexColors: true,
 					blending: THREE.AdditiveBlending,
-					transparent: false
+					transparent: true
 				} );
 
 				linesMesh = new THREE.LineSegments( geometry, material );
@@ -204,7 +212,7 @@ const Thing = ()=>{
         //   camera.zoom = 0.2
         //   camera.updateProjectionMatrix()
         // }
-        
+        camera.updateProjectionMatrix()
         controls.update()
  
       }
@@ -221,15 +229,40 @@ const Thing = ()=>{
 					particlePositions[ i * 3 ] += particleData.velocity.x;
 					particlePositions[ i * 3 + 1 ] += particleData.velocity.y;
 					particlePositions[ i * 3 + 2 ] += particleData.velocity.z;
+          
+          let rSquared = Math.pow(r,2)
+          let xSquared = Math.pow(particlePositions[i*3],2),
+              ySquared= Math.pow(particlePositions[i*3+1],2),
+              zSquared=  Math.pow(particlePositions[i*3+2],2)
+          let eq = xSquared + ySquared + zSquared <= rSquared
+          
+  
+          /**     
+ * 
+ * 
+ * x+y+z = r
+ * 
+ * 
+*/
+          if(!eq){
+            	particleData.velocity.x = - particleData.velocity.x ;
+          }
+           if(!eq){
+            	particleData.velocity.y = - particleData.velocity.y;
+          }
+           if(!eq){
+            	particleData.velocity.z = - particleData.velocity.z;
+          }
+          
+          
+					// if ( particlePositions[ i * 3 + 1 ] < - r || particlePositions[ i * 3 + 1 ] > r )
+					// 	particleData.velocity.y = - particleData.velocity.y;
 
-					if ( particlePositions[ i * 3 + 1 ] < - rHalf || particlePositions[ i * 3 + 1 ] > rHalf )
-						particleData.velocity.y = - particleData.velocity.y;
+					// if ( particlePositions[ i * 3 ] < - r || particlePositions[ i * 3 ] > r )
+					// 	particleData.velocity.x = - particleData.velocity.x;
 
-					if ( particlePositions[ i * 3 ] < - rHalf || particlePositions[ i * 3 ] > rHalf )
-						particleData.velocity.x = - particleData.velocity.x;
-
-					if ( particlePositions[ i * 3 + 2 ] < - rHalf || particlePositions[ i * 3 + 2 ] > rHalf )
-						particleData.velocity.z = - particleData.velocity.z;
+					// if ( particlePositions[ i * 3 + 2 ] < - r || particlePositions[ i * 3 + 2 ] > r )
+					// 	particleData.velocity.z = - particleData.velocity.z;
 
 					if ( effectController.limitConnections && particleData.numConnections >= effectController.maxConnections )
 						continue;

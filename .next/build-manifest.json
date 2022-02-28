@@ -39,6 +39,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/projects.js"
+    ],
+    "/projects/synthya": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/projects/synthya.js"
     ]
   },
   "ampFirstPages": []

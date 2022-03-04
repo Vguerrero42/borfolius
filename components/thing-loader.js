@@ -16,8 +16,9 @@ export const ThingContainer = forwardRef(({children},ref) =>(
   <Box ref={ref} className='thing' m='auto' mt={['-20px','-60px','-120px']}
     mb={['-20px','-60px','-120px']}
     w={[280,480,640]}
-    h={280,480,640}
+    h={[280,480,640]}
     position='relative'
+    
     >
       {children}
     </Box>
@@ -32,3 +33,4 @@ const Loader = () =>{
 }
 
 export default Loader
+//[280,480,640]

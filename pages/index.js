@@ -12,8 +12,8 @@ const Page = () =>{
   return(
     <Layout>
     <Container >
-      <Box borderRadius='lg' bg={useColorModeValue('whigreenpha.500',"whigreenpha.200")} p={3} mb={6} align='center'>
-        Real Dev Hours UwU
+      <Box borderRadius='lg' bg={useColorModeValue('whiteAlpha.600',"whiteAlpha.200")} p={3} mb={6} align='center'>
+        Github Link /Linked IN Link/ Sum else  
       </Box>
       <Box display={{md:'flex'}}>
         <Box flexGrow={1}>
@@ -28,17 +28,17 @@ const Page = () =>{
       ml={{md:6}}
       align='center'
       >
-        <Image borderColor='whigreenpha.800' borderWidth={2} borderStyle='solid' 
-        maxWidth="150px" display='inline-block' borderRadius='full' src='/headshot.png' alt='Profile Image'
+        <Image borderColor='whiteAlpha.800' borderWidth={2} borderStyle='solid' 
+        maxWidth="100px" display='inline-block' borderRadius='full' src='/headshot.png' alt='Profile Image'
         />
 
       </Box>
       </Box>
       <Section delay={0.1}>
         <Heading as='h3' variant='section-title'>
-          Work 
+          Hey 
         </Heading> 
-        <Paragraph>Paragraph about myself</Paragraph>
+        <Paragraph>I'm a Software Engineer from NYC ykmb.</Paragraph>
         <Box align='center' my={4}>
           <NextLink href='/projects'>
             <Button rightIcon={<ChevronRightIcon/>} colorScheme='green'>
@@ -47,7 +47,7 @@ const Page = () =>{
           </NextLink>
         </Box>
       </Section>
-      <Section delay={0.2}>
+      {/* <Section delay={0.2}>
         <Heading as='h3' variant='section-title'>
           Bio ?
         </Heading>
@@ -65,7 +65,7 @@ const Page = () =>{
           Other things 
         </Heading>
         <Paragraph>That I Enjoy Doing</Paragraph>
-        </Section>
+        </Section> */}
     </Container>
     </Layout>
   )

@@ -16,10 +16,15 @@ const Work = () =>{
         </P>
         <List ml={4} my={4}>
           <ListItem>
+            <Meta>Stack</Meta>
+            <span>Nodejs,Chakra ui</span>
+          </ListItem>
+          <ListItem>
             <Meta>Site</Meta>
             <Badge color={useColorModeValue('blue','orange')}>In Progress...</Badge>
           </ListItem>
         </List>
+        <WorkImage src='public/synth.png' alt='synthya' ></WorkImage>
       </Container>
     </Layout>
   )

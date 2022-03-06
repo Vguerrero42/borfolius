@@ -32,9 +32,9 @@ const Logo = () =>{
     <Link href='/'>
       <a>
         <LogoBox>
-          <Image src={bullImg} width={50} height={50} alt="logo"/>
+          <Image src={useColorModeValue(bullImg,ottollImg)} width={50} height={50} alt="logo"/>
             <Text 
-            color={useColorModeValue('gray800','whigreenpha.900')}
+            color={useColorModeValue('gray.800','whiteAlpha.900')}
             fontFamily='M PLUS Rounded 1c'
             fontWeight='bold'
             ml={3}/>

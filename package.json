@@ -4,7 +4,7 @@
   "description": "Peer deep through this window",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"  ,
+    "dev": "next dev -H 192.168.1.171 ",
     "build": "next build",
     "prettier": "prettier -write .",
     "lint": "next lint"

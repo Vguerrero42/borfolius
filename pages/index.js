@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import {Container,Box,Heading,Image,Button,useColorModeValue, AspectRatio} from 
+import {Container,Box,Heading,Image,Button,Text,useColorModeValue, AspectRatio} from 
 "@chakra-ui/react"
 import Layout from '../components/layouts/article'
 import Section from "../components/section"
@@ -12,8 +12,14 @@ const Page = () =>{
   return(
     <Layout>
     <Container >
-      <Box borderRadius='lg' bg={useColorModeValue('whiteAlpha.600',"whiteAlpha.200")} p={3} mb={6} align='center'>
-        Github Link /Linked IN Link/ Sum else  
+      <Box borderRadius='lg' bg={useColorModeValue('whiteAlpha.600',"whiteAlpha.200")} p={3} mb={6} align='space-between'>
+        <NextLink href='https://github.com/Vguerrero42/borfolius'>
+          <Text>
+            Github Link /Linkedin Link/ Sum else
+          </Text>
+          
+          </NextLink>
+          
       </Box>
       <Box display={{md:'flex'}}>
         <Box flexGrow={1}>
@@ -38,7 +44,7 @@ const Page = () =>{
         <Heading as='h3' variant='section-title'>
           Hey 
         </Heading> 
-        <Paragraph>I'm a Software Engineer from NYC ykmb.</Paragraph>
+        <Paragraph>I'm a Software Engineer from NYC.</Paragraph>
         <Box align='center' my={4}>
           <NextLink href='/projects'>
             <Button rightIcon={<ChevronRightIcon/>} colorScheme='green'>

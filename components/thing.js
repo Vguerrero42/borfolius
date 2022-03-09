@@ -122,9 +122,8 @@ const Thing = () => {
       controls.enableDamping = true
       controls.dampingFactor = 0.05
       setControls(controls)
-      /**
- PARTICLES
- */
+
+      /*PARTICLES*/
 
       const segments = maxParticleCount * maxParticleCount
 

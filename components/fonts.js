@@ -1,12 +1,10 @@
-import { Global } from "@emotion/react";
+import { Global } from '@emotion/react'
 
-const Fonts =()=>(
+const Fonts = () => (
   <Global
     styles={`
     font-family: 'Mukta', sans-serif`}
   />
-
-
 )
 
 export default Fonts

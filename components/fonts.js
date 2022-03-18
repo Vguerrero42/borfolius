@@ -1,12 +1,10 @@
-import { Global } from '@emotion/react'
-
 const Fonts = () => (
-  <Global
-    styles={`
-    font-family: 'Mukta', sans-serif`}
-  />
+  <style jsx global>{`
+    @import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300&display=swap');
+  `}</style>
 )
 
 export default Fonts
+// font-family: 'Sansita Swashed', cursive;
 
-//@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@100&family=Ubuntu:wght@300&display=swap')
+//@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300&display=swap');

@@ -20,7 +20,7 @@ const Thing = () => {
   const [loading, setLoading] = useState(true)
   const [renderer, setRenderer] = useState()
   const [_camera, setCamera] = useState()
-  const [target] = useState(new THREE.Vector3(-0.5, 1.2, 0))
+  const [target] = useState(new THREE.Vector3(-1.5, 0, 2))
   //
   const [initialCameraPosition] = useState(
     new THREE.Vector3(
@@ -32,11 +32,12 @@ const Thing = () => {
   const [scene] = useState(new THREE.Scene())
   const [_controls, setControls] = useState()
 
-  let maxParticleCount = 250
-  let particleCount = 250
+  let maxParticleCount = 400
+  let particleCount = 400
   let particlesData = []
   const r = 500
   const rHalf = r / 2
+  const frustumSize = 600
   let positions, colors
   let particles
   let pointCloud
@@ -49,8 +50,8 @@ const Thing = () => {
     showLines: true,
     minDistance: 10,
     limitConnections: true,
-    maxConnections: 30,
-    particleCount: 250
+    maxConnections: 3,
+    particleCount: 400
   }
 
   const handleWindowResize = useCallback(() => {
@@ -77,11 +78,14 @@ const Thing = () => {
       renderer.setPixelRatio(window.devicePixelRatio)
       renderer.setSize(scW, scH)
       renderer.outputEncoding = THREE.sRGBEncoding
+      // renderer.shadowMap.enabled = true
+      // renderer.shadowMap.type = THREE.PCFSoftShadowMap
       container.appendChild(renderer.domElement)
       setRenderer(renderer)
 
       const scale = scH * 0.005 + 4.8
       const scaleDouble = scale * 2
+      const aspect = scW / scH
 
       const camera = new THREE.OrthographicCamera(
         -scale,
@@ -92,29 +96,43 @@ const Thing = () => {
         50000
       )
       // const camera = new THREE.PerspectiveCamera(50,scW/scH,1,1000)
+      // let camera = new THREE.OrthographicCamera(
+      //   (0.5 * frustumSize * aspect) / -2,
+      //   (0.5 * frustumSize * aspect) / 2,
+      //   frustumSize / 2,
+      //   frustumSize / -2,
+      //   150,
+      //   1000
+      // )
       camera.position.copy(initialCameraPosition)
       camera.lookAt(target)
       setCamera(camera)
 
-      const group = new THREE.Group({ frustumCulled: false })
+      const group = new THREE.Group()
       scene.add(group)
-      const ambientLight = new THREE.AmbientLight(0xcccccc, 100)
+      // const ambientLight = new THREE.AmbientLight(0xcccccc, 100)
+      // const light = new THREE.PointLight(0xffffff, 1, 100)
+      // light.position.set(0, 10, 4)
+      // light.castShadow = true // default false
+      // scene.add(light)
+
       // scene.add(ambientLight)
-      const sphere = new THREE.SphereGeometry(r)
+      const sphere = new THREE.SphereGeometry(r, 25, 10)
       const object = new THREE.Mesh(
         sphere,
         new THREE.MeshBasicMaterial({
-          color: 0x0a0a0a0
-          // shadowSide:THREE.FrontSide
-          // blending:THREE.AdditiveBlending,
+          color: 0x00f0f,
+          blending: THREE.AdditiveBlending,
+          wireframe: true
         })
       )
-      // const helper = new THREE.BoxHelper(object)
-      // helper.material.color.setHex(0x88888)
-      // helper.material.blending = THREE.AdditiveBlending
-      // helper.material.transparent = false
+
+      const helper = new THREE.BoxHelper(object)
+      helper.material.color.setHex(0x0000)
+      helper.material.blending = THREE.AdditiveBlending
+      helper.material.transparent = false
       // group.add(helper)
-      // group.add(object)
+      group.add(object)
 
       const controls = new OrbitControls(camera, renderer.domElement)
       controls.autoRotate = true
@@ -131,11 +149,12 @@ const Thing = () => {
       colors = new Float32Array(segments * 3)
 
       const pMaterial = new THREE.PointsMaterial({
-        color: new THREE.Color(0x1f003c),
+        color: new THREE.Color(0x6a0dad),
         size: 3,
+        // side: THREE.DoubleSide,
         vertexColors: false,
-        blending: THREE.AdditiveBlending,
-        shadowSide: THREE.FrontSide
+        blending: THREE.AdditiveBlending
+        // shadowSide: THREE.FrontSide
         // side:THREE.DoubleSide
       })
 
@@ -162,9 +181,9 @@ const Thing = () => {
         // add it to the geometry
         particlesData.push({
           velocity: new THREE.Vector3(
-            -1 + Math.random() * 1,
             -1 + Math.random() * 2,
-            -1 + Math.random() * 1
+            -1 + Math.random() * 2,
+            -1 + Math.random() * 2
           ),
           numConnections: 0
         })
@@ -201,8 +220,8 @@ const Thing = () => {
       const material = new THREE.LineBasicMaterial({
         color: 0x2ba3,
         vertexColors: true,
-        blending: THREE.AdditiveBlending
-        // transparent: true,
+        blending: THREE.AdditiveBlending,
+        transparent: true
         // side:THREE.DoubleSide,
         // shadowSide:THREE.FrontSide
       })
@@ -212,6 +231,7 @@ const Thing = () => {
 
       /*DRAW BOX HERE,THEN */
       let sign = '+'
+      let arr = [1, 1, 3, 5, 8]
       const switchImage = () => {
         currentVector =
           'current image being displayed,should be a vector, 3darray'
@@ -220,7 +240,12 @@ const Thing = () => {
       }
       const distanceTick = () => {
         let x = effectController.minDistance
+        let y = effectController.maxConnections
+
         sign == '-' ? (x -= 1) : (x += 1)
+        // if (x % 10 == 0) {
+        //   y < 5 ? (y += 1) : (y = 1)
+        // }
         if (x == 50) {
           sign = '+'
           // switchImage()
@@ -229,6 +254,7 @@ const Thing = () => {
           sign = '-'
         }
         effectController.minDistance = x
+        effectController.maxConnections = y
       }
       let req = null
       let frame = 0
@@ -259,9 +285,9 @@ const Thing = () => {
           //   frame += 1
 
           // }
-          // if(camera.position.z >= -1){
+          // if (camera.position.z >= -1) {
           //   console.log(camera.position.z)
-          //   camera.position.z -=0.01
+          //   camera.position.z -= 0.01
           //   camera.updateProjectionMatrix()
           // }
           camera.lookAt(target)
@@ -323,7 +349,7 @@ const Thing = () => {
             const dz =
               particlePositions[i * 3 + 2] - particlePositions[j * 3 + 2]
             const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
-
+            const check1 = particleData.velocity.y
             if (dist < effectController.minDistance) {
               particleData.numConnections++
               particleDataB.numConnections++

@@ -14,6 +14,10 @@ const LogoBox = styled.span`
   line-height: 1.5rem;
   padding: 1rem;
 
+  img {
+    transition: 200ms ease;
+  }
+
   &:hover img {
     transition: ease-in-out;
     transition-duration: 1s;
@@ -23,16 +27,17 @@ const LogoBox = styled.span`
 
 const Logo = () => {
   const bullImg = '/bull.png'
-  const ottollImg = '/Ottoll.svg'
+  const whiteBull = '/whiteBull.png'
 
   return (
     <Link href="/">
       <a>
         <LogoBox>
           <Image
-            src={useColorModeValue(bullImg, ottollImg)}
+            src={useColorModeValue(bullImg, whiteBull)}
             width={50}
             height={50}
+            quality={100}
             alt="logo"
           />
           <Text

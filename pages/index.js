@@ -9,6 +9,7 @@ import {
   useColorModeValue,
   AspectRatio
 } from '@chakra-ui/react'
+import { IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import Paragraph from '../components/paragraph'
@@ -20,14 +21,30 @@ const Page = () => {
     <Layout>
       <Container>
         <Box
+          display={'flex'}
           borderRadius="lg"
           bg={useColorModeValue('whiteAlpha.600', 'whiteAlpha.200')}
           p={3}
           mb={6}
-          align="space-between"
+          justifyContent="space-around"
         >
           <NextLink href="https://github.com/Vguerrero42/borfolius">
-            <Text>Github Link /Linkedin Link/ Sum else</Text>
+            <Button
+              variant="ghost"
+              colorScheme="green"
+              rightIcon={<IoLogoGithub />}
+            >
+              Github
+            </Button>
+          </NextLink>
+          <NextLink href="https://www.linkedin.com/in/victor-guerrero42/">
+            <Button
+              variant="ghost"
+              colorScheme="green"
+              rightIcon={<IoLogoLinkedin />}
+            >
+              Linkedin
+            </Button>
           </NextLink>
         </Box>
         <Box display={{ md: 'flex' }}>

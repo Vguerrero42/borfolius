@@ -32,8 +32,8 @@ const Thing = () => {
   const [scene] = useState(new THREE.Scene())
   const [_controls, setControls] = useState()
 
-  let maxParticleCount = 400
-  let particleCount = 400
+  let maxParticleCount = 300
+  let particleCount = 300
   let particlesData = []
   const r = 500
   const rHalf = r / 2
@@ -50,8 +50,8 @@ const Thing = () => {
     showLines: true,
     minDistance: 10,
     limitConnections: true,
-    maxConnections: 3,
-    particleCount: 400
+    maxConnections: 2,
+    particleCount: 300
   }
 
   const handleWindowResize = useCallback(() => {
@@ -230,7 +230,8 @@ const Thing = () => {
       group.add(linesMesh)
 
       /*DRAW BOX HERE,THEN */
-      let sign = '+'
+      let distSign = '+'
+      let connSign = '+'
       let arr = [1, 1, 3, 5, 8]
       const switchImage = () => {
         currentVector =
@@ -242,16 +243,20 @@ const Thing = () => {
         let x = effectController.minDistance
         let y = effectController.maxConnections
 
-        sign == '-' ? (x -= 1) : (x += 1)
-        // if (x % 10 == 0) {
-        //   y < 5 ? (y += 1) : (y = 1)
-        // }
+        distSign == '-' ? (x -= 1) : (x += 1)
+        connSign == '-' ? (y -= 1) : (y += 1)
         if (x == 50) {
-          sign = '+'
+          distSign = '+'
           // switchImage()
         }
         if (x == 400) {
-          sign = '-'
+          distSign = '-'
+        }
+        if (y == 3) {
+          connSign = '+'
+        }
+        if (y == 1000) {
+          connSign = '-'
         }
         effectController.minDistance = x
         effectController.maxConnections = y
